@@ -28,11 +28,11 @@ jobs:
         port: ${{ secrets.PORT }}
         script: |
           whoami
-          sudo rm -rf /home/ubuntu/lmspk
+          sudo rm -rf /home/ubuntu/CoalDev
           git clone https://github.com/CoalAI/CoalDev
           cd /home/ubuntu/CoalDev
-          sudo docker kill CoalDev
-          sudo docker rm CoalDev
+          sudo docker kill CD
+          sudo docker rm CD
           sudo docker rmi coal:latest
-          sudo docker build -f Dockerfile -t "coal:latest"
-          sudo docker run -v ~/CoalDev:/code --name=CoalDev -d -p 0.0.0.0:80:8000 coal:latest
+          sudo docker build -f Dockerfile -t "coal:latest" .
+          sudo docker run -v ~/CoalDev:/code --name=CD -d -p 0.0.0.0:80:5000 coal:latest
