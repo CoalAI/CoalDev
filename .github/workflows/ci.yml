@@ -1,15 +1,11 @@
-# This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
-# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
-
-name: Node.js CI
-
+name: Deploy on master push
 on:
   push:
     branches: 
       - master
     tags:
       - v0.0
-#     Run tests for any PRs.
+  # Run tests for any PRs.
   pull_request:
 
 env:
@@ -26,18 +22,17 @@ jobs:
     - name: SSH into server and pull + build & run docker
       uses: appleboy/ssh-action@master
       with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.KEY }}
-          port: ${{ secrets.PORT }}
-          script: |
-            whoami
-            sudo rm -rf /home/ubuntu/lmspk
-            git clone https://github.com/CoalAI/CoalDev
-            cd /home/ubuntu/CoalDev
-            sudo docker kill CoalDev
-            sudo docker rm CoalDev
-            sudo docker rmi coal:latest
-            sudo docker build -f Dockerfile -t "coal:latest"
-            sudo docker run -v ~/CoalDev:/code --name=CoalDev -d -p 0.0.0.0:80:8000 coal:latest
-
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.KEY }}
+        port: ${{ secrets.PORT }}
+        script: |
+          whoami
+          sudo rm -rf /home/ubuntu/lmspk
+          git clone https://github.com/CoalAI/CoalDev
+          cd /home/ubuntu/CoalDev
+          sudo docker kill CoalDev
+          sudo docker rm CoalDev
+          sudo docker rmi coal:latest
+          sudo docker build -f Dockerfile -t "coal:latest"
+          sudo docker run -v ~/CoalDev:/code --name=CoalDev -d -p 0.0.0.0:80:8000 coal:latest
