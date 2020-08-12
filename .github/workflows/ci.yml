@@ -20,12 +20,11 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
-      - name: checkout
+    - name: checkout
       uses: actions/checkout@v1
 
-      - name: SSH into server and pull + build & run docker
+    - name: SSH into server and pull + build & run docker
       uses: appleboy/ssh-action@master
-
       with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
