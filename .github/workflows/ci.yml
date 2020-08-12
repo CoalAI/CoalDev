@@ -5,30 +5,48 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ master ]
+    branches: 
+      - master
+    tags:
+      - v0.0
     # Run tests for any PRs.
   pull_request:
+
+env:
+  IMAGE_NAME: image
 
 jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
     steps:
-        - name: checkout
-          uses: actions/checkout@v1
+      - name: checkout
+      uses: actions/checkout@v1
 
-        - name: SSH into server and pull + build & run docker
-        uses: appleboy/ssh-action@master
+      - name: SSH into server and pull + build & run docker
+      uses: appleboy/ssh-action@master
 
-        with:
-            host: ${{ secrets.HOST }}
-            username: ${{ secrets.USERNAME }}
-            key: ${{ secrets.KEY }}
-            port: ${{ secrets.PORT }}
-        
-            run: npm install -g yarn
-            - name: yarn install, build, and test
-                run: |
-                yarn
-                yarn build --if-present
-                yarn test
+      with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          port: ${{ secrets.PORT }}
+          script: |
+            whoami
+            sudo rm -rf /home/ubuntu/lmspk
+            git clone https://github.com/CoalAI/CoalDev
+            cd /home/ubuntu/CoalDev
+            sudo docker kill CoalDev
+            sudo docker rm CoalDev
+            sudo docker rmi coal:latest
+            sudo docker build -f Dockerfile -t "coal:latest" .
+
+            #Don't know on which portnumber CoalDev website is hosted?
+            sudo docker run -v ~/CoalDev:/code --name=CoalDev -d -p 0.0.0.0:80:8000 coal:latest
+
+            # run: npm install -g yarn
+            # - name: yarn install, build, and test
+            #     run: |
+            #     yarn
+            #     yarn build --if-present
+            #     yarn test
