@@ -9,7 +9,7 @@ on:
       - master
     tags:
       - v0.0
-    # Run tests for any PRs.
+#     Run tests for any PRs.
   pull_request:
 
 env:
@@ -38,14 +38,6 @@ jobs:
             sudo docker kill CoalDev
             sudo docker rm CoalDev
             sudo docker rmi coal:latest
-            sudo docker build -f Dockerfile -t "coal:latest" .
-
-            #Don't know on which portnumber CoalDev website is hosted?
+            sudo docker build -f Dockerfile -t "coal:latest"
             sudo docker run -v ~/CoalDev:/code --name=CoalDev -d -p 0.0.0.0:80:8000 coal:latest
 
-            # run: npm install -g yarn
-            # - name: yarn install, build, and test
-            #     run: |
-            #     yarn
-            #     yarn build --if-present
-            #     yarn test
