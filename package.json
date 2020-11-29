@@ -1,0 +1,22 @@
+{
+  "name": "coaldev",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.html",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KUBAhub/CoalDev.git"
+  },
+  "author": "Muhammad Kamran (@mkrnaqeebi)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/KUBAhub/CoalDev/issues"
+  },
+  "homepage": "https://github.com/KUBAhub/CoalDev#readme",
+  "dependencies": {
+    "server": "^1.0.19"
+  }
+}

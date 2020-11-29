@@ -1,0 +1,38 @@
+name: Deploy on master push
+on:
+  push:
+    branches: 
+      - master
+    tags:
+      - v0.0
+  # Run tests for any PRs.
+  pull_request:
+
+env:
+  IMAGE_NAME: image
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+    - name: checkout
+      uses: actions/checkout@v1
+
+    - name: SSH into server and pull + build & run docker
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.KEY }}
+        port: ${{ secrets.PORT }}
+        script: |
+          whoami
+          sudo rm -rf /home/ubuntu/CoalDev
+          git clone https://github.com/CoalAI/CoalDev
+          cd /home/ubuntu/CoalDev
+          sudo docker kill CD
+          sudo docker rm CD
+          sudo docker rmi coal:latest
+          sudo docker build -f Dockerfile -t "coal:latest" .
+          sudo docker run -v ~/CoalDev:/code --name=CD -d -p 0.0.0.0:80:5000 coal:latest
